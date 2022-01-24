@@ -36,15 +36,6 @@ public class UserProvider {
     }
 
 
-    public GetUserRes getUser(int id) throws BaseException {
-        try {
-            GetUserRes getUserRes = (GetUserRes) userDao.getUser(id);
-            return getUserRes;
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
 
     public int checkEmail(String emailAddress) throws BaseException{
         try{
@@ -54,7 +45,7 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
+    /** 로그인 API */
     public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException{
         User user = userDao.getPwd(postLoginReq);
         String password;
@@ -65,9 +56,9 @@ public class UserProvider {
         }
 
         if(postLoginReq.getPassword().equals(password)){
-            int userIdx = userDao.getPwd(postLoginReq).getId();
+            int userIdx = userDao.getPwd(postLoginReq).getUserIdx();
             String jwt = jwtService.createJwt(userIdx);
-            return new PostLoginRes(userIdx,jwt);
+            return new PostLoginRes(userIdx);
         }
         else{
 

@@ -19,23 +19,11 @@ public class UserDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public List<GetUserRes> getUser(int id){
-        String getUserQuery = "select * from tb_foodly_user where id = ?";
-        int getUserParams = id;
-        return this.jdbcTemplate.query(getUserQuery,
-                (rs,rowNum) -> new GetUserRes(
-                        rs.getInt("id"),
-                        rs.getString("email_address"),
-                        rs.getString("password"),
-                        rs.getString("name")),
-                getUserParams
-                );
-    }
 
-
+    /** 회원가입 API */
     public int createUser(PostUserReq postUserReq){
-        String createUserQuery = "insert into tb_foodly_user (id, email_address, password, name) VALUES (?,?,?,?)";
-        Object[] createUserParams = new Object[]{postUserReq.getId(),postUserReq.getEmail_address(), postUserReq.getPassword(),postUserReq.getUserName()};
+        String createUserQuery = "insert into tb_foodly_user (emailAddress, password, name, type) VALUES (?,?,?,?)";
+        Object[] createUserParams = new Object[]{postUserReq.getEmailAddress(), postUserReq.getPassword(),postUserReq.getName(),postUserReq.getType()};
         this.jdbcTemplate.update(createUserQuery, createUserParams);
 
         String lastInserIdQuery = "select last_insert_id()";
@@ -43,24 +31,24 @@ public class UserDao {
     }
 
     public int checkEmail(String emailAddress){
-        String checkEmailQuery = "select exists(select emailAddress from tb_foodly_user where email_address = ?)";
+        String checkEmailQuery = "select exists(select emailAddress from tb_foodly_user where emailAddress = ?)";
         String checkEmailParams = emailAddress;
         return this.jdbcTemplate.queryForObject(checkEmailQuery,
                 int.class,
                 checkEmailParams);
 
     }
-
+    /** 로그인 API */
     public User getPwd(PostLoginReq postLoginReq){
-        String getPwdQuery = "select userIdx, password,emailAddress,userName from RC_coupang_eats_d_Riley.User where emailAddress = ?";
-        String getPwdParams = postLoginReq.getEmail_address();
+        String getPwdQuery = "select userIdx, emailAddress,password,name from tb_foodly_user where emailAddress = ?";
+        String getPwdParams = postLoginReq.getEmailAddress();
 
         return this.jdbcTemplate.queryForObject(getPwdQuery,
                 (rs,rowNum)-> new User(
                         rs.getInt("userIdx"),
-                        rs.getString("userName"),
+                        rs.getString("emailAddress"),
                         rs.getString("password"),
-                        rs.getString("emailAddress")
+                        rs.getString("name")
                 ),
                 getPwdParams
         );

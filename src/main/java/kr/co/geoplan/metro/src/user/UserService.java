@@ -34,9 +34,10 @@ public class UserService {
     }
 
     //POST
+    /** 회원가입 API */
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
         //중복
-        if (userProvider.checkEmail(postUserReq.getEmail_address()) == 1) {
+        if (userProvider.checkEmail(postUserReq.getEmailAddress()) == 1) {
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
         }
 
@@ -49,15 +50,40 @@ public class UserService {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
         }
         try {
-            int userIdx = userDao.createUser(postUserReq);
+            int id = userDao.createUser(postUserReq);
             //jwt 발급.
-            String jwt = jwtService.createJwt(userIdx);
-            return new PostUserRes(jwt, userIdx);
+            String jwt = jwtService.createJwt(id);
+            return new PostUserRes(id);
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    /**
+     * 로그 테스트 API
+     * [GET] /test/log
+     * @return String
+     */
+    @ResponseBody
+    @GetMapping("/log")
+    public String getAll() {
+        System.out.println("테스트");
+//        trace, debug 레벨은 Console X, 파일 로깅 X
+//        logger.trace("TRACE Level 테스트");
+//        logger.debug("DEBUG Level 테스트");
+
+//        info 레벨은 Console 로깅 O, 파일 로깅 X
+        logger.info("INFO Level 테스트");
+//        warn 레벨은 Console 로깅 O, 파일 로깅 O
+        logger.warn("Warn Level 테스트");
+//        error 레벨은 Console 로깅 O, 파일 로깅 O (app.log 뿐만 아니라 error.log 에도 로깅 됨)
+//        app.log 와 error.log 는 날짜가 바뀌면 자동으로 *.gz 으로 압축 백업됨
+        logger.error("ERROR Level 테스트");
+
+        return "Success Test";
+    }
+
 
 
 }

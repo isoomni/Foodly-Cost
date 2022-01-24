@@ -15,7 +15,7 @@ import static kr.co.geoplan.metro.config.BaseResponseStatus.*;
 import static kr.co.geoplan.metro.utils.ValidationRegex.*;
 
 @RestController
-@RequestMapping("/app/users")
+@RequestMapping("/users")
 public class UserController {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -35,32 +35,6 @@ public class UserController {
 
 
     /**
-     * 회원 조회 API
-     * [GET] /users/:userIdx
-     * @return BaseResponse<GetUserRes>
-     */
-    // Path-variable
-    @ResponseBody
-    @GetMapping("/{id}") // (GET) 127.0.0.1:9000/app/users/:userIdx
-    public BaseResponse<GetUserRes> getUser(@PathVariable("id") int id) {
-        // Get Users
-        try{
-            //jwt에서 idx 추출.
-            int userIdxByJwt = jwtService.getUserIdx();
-            //userIdx와 접근한 유저가 같은지 확인
-            if(id != userIdxByJwt){
-                return new BaseResponse<>(INVALID_USER_JWT);
-            }  // 이 부분까지는 유저가 사용하는 기능 중 유저에 대한 보안이 철저히 필요한 api 에서 사용
-            //같다면 유저네임 변경
-            GetUserRes getUsersRes = userProvider.getUser(id);
-            return new BaseResponse<>(getUsersRes);
-        } catch(BaseException exception){
-            return new BaseResponse<>((exception.getStatus()));
-        }
-
-    }
-
-    /**
      * 회원가입 API
      * [POST] /users
      * @return BaseResponse<PostUserRes>
@@ -70,21 +44,22 @@ public class UserController {
     @PostMapping("")
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
 
-        if(postUserReq.getEmail_address() == null){
+        if(postUserReq.getEmailAddress() == null){
             return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-        }
-        if(postUserReq.getUserName() == null){
-            return new BaseResponse<>(POST_USERS_EMPTY_USERNAME);
         }
         if(postUserReq.getPassword() == null){
             return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
         }
-        if(postUserReq.getPassword() == postUserReq.getEmail_address()){ // 아이디와 비밀번호가 같습니다.
-            return new BaseResponse<>(POST_USERS_PASSWORD_SAME_WITH_EMAIL);
+        if(postUserReq.getName() == null){
+            return new BaseResponse<>(POST_USERS_EMPTY_USERNAME);
+        }
+        if(postUserReq.getType() == null){
+            return new BaseResponse<>(POST_USERS_EMPTY_TYPE);
         }
 
+
         //이메일 정규표현
-        if(!isRegexEmail(postUserReq.getEmail_address())){  // 정규표현식과 다른 형식으로 받으면 invalid
+        if(!isRegexEmail(postUserReq.getEmailAddress())){  // 정규표현식과 다른 형식으로 받으면 invalid
             return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
         }
         //비밀번호 정규표현
@@ -109,18 +84,18 @@ public class UserController {
     @PostMapping("/logIn")
     public BaseResponse<PostLoginRes> logIn(@RequestBody PostLoginReq postLoginReq){
         try{
-            if(postLoginReq.getEmail_address() == null){ //이메일을 입력하지 않음
+            if(postLoginReq.getEmailAddress() == null){   //이메일을 입력하지 않음
                 return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
             }
             if(postLoginReq.getPassword() == null){    //비밀번호를 입력하지 않음
                 return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
             }
-            if(postLoginReq.getPassword() == postLoginReq.getEmail_address()){ // 아이디와 비밀번호가 같습니다.
+            if(postLoginReq.getPassword() == postLoginReq.getEmailAddress()){ // 아이디와 비밀번호가 같습니다.
                 return new BaseResponse<>(POST_USERS_PASSWORD_SAME_WITH_EMAIL);
             }
 
             //이메일 정규표현
-            if(!isRegexEmail(postLoginReq.getEmail_address())){  // 정규표현식과 다른 형식으로 받으면 invalid
+            if(!isRegexEmail(postLoginReq.getEmailAddress())){  // 정규표현식과 다른 형식으로 받으면 invalid
                 return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
             }
             //비밀번호 정규표현

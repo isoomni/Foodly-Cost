@@ -4,6 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+src/main/java/kr/co/geoplan/metro/config/secret/Secret
 
 ### STS ###
 .apt_generated

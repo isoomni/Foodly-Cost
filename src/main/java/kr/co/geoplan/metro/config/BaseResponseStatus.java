@@ -36,24 +36,21 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_PASSWORD(false,2019,"비밀번호 형식을 확인해주세요."),
     POST_USERS_INVALID_PHONENUMBER(false,2020,"전화번호 형식을 확인해주세요."),
     POST_USERS_WITHDRAWAL(false, 2021, "탈퇴한 유저입니다."),
+    POST_USERS_EMPTY_TYPE(false, 2022,"유저 타입을 입력하세요"),
 
     // [POST] /reviews
-    POST_REVIEWS_LONG_CONTENTS(false, 2030, "글자수가 초과되었습니다."),
-    POST_REVIEWS_EMPTY_CONTENTS(false,2031,"리뷰 내용을 작성해주세요"),
-    POST_REVIEWS_EMPTY_STAR(false,2032,"별점을 입력해주세요"),
-    POST_REVIEWS_EMPTY_STATUS(false,2033,"리뷰 상태를 확인해주세요"),
-    POST_REVIEWS_EXISTS_REVIEW(false,2034,"이미 리뷰를 입력하셨습니다."),
+    POST_REVIEWS_EMPTY_CONTENTS(false, 2040, "리뷰를 입력해 주세요."),
+    POST_REVIEWS_EMPTY_STAR(false, 2041, "별점을 입력해 주세요."),
+    POST_REVIEWS_LONG_CONTENTS(false,2042,"리뷰가 500자를 초과하였습니다."),
+    POST_REVIEWS_EMPTY_STATUS(false, 2043, "리뷰의 status가 없습니다."),
 
+    // [GET] /presidents
+    POST_PRESIDENTS_USERIDX_IS_NOT_P(false,2050,"사장님 계정이 아닌 계정으로 접속하셨습니다"),
 
-    // [POST] /addresses
-    POST_ADDRESSES_EMPTY_TITLE(false, 2040, "배달주소 제목을 입력해주세요"),
-    POST_ADDRESSES_EMPTY_ROADNAME(false, 2041, "도로명주소를 입력해주세요"),
-    POST_ADDRESSES_EMPTY_DETAIL(false, 2042, "상세 주소를 입력해주세요"),
-    POST_ADDRESSES_EMPTY_LATITUDE(false, 2043, "위도가 없습니다."),
-    POST_ADDRESSES_EMPTY_LONGTITUDE(false, 2044, "경도가 없습니다."),
+    // [GET] /restaurants
+    POST_ADDRESS_PARAM_CONTAINS_SPACE(false,2060,"띄어쓰기를 제거하고 명사 형태로 검색하세요(예: 강남, 삼성)"),
 
-
-
+// code 숫자 중복되지 않도록 하는 class 만들어 보고 싶음.
 
     /**
      * 3000 : Response 오류
@@ -65,6 +62,9 @@ public enum BaseResponseStatus {
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
     FAILED_TO_LOGIN(false,3014,"없는 아이디거나 비밀번호가 틀렸습니다."),
 
+    // REVIEW
+    REVIEW_MODIFY_FAIL(false,3020,"리뷰 수정 실패"),
+    REVIEW_DELETE_FAIL(false,3020,"리뷰 삭제 실패"),
 
 
     /**
@@ -77,10 +77,9 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정 실패"),
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
-    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다."),
+    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");
 
-    //[PATCH] /orders/{userIdx}/carts/{cartIdx}
-    MODIFY_FAIL_ORDER(false, 4014, "카트 정보 수정 실패");
+
 
     // 5000 : 필요시 만들어서 쓰세요
     // 6000 : 필요시 만들어서 쓰세요
