@@ -3,7 +3,7 @@
 ## :octocat: api 명세
 
 | Method | URI | Description | 개발 완료 | 토큰 필요|
-| ------ | -- | -- |----------- |---------- |
+| ------ | -- | -- |--------------- |-------------- |
 | POST | /users | [회원가입](https://github.com/isoomni/geoplan/tree/master/src/src/main/java/kr/co/geoplan/metro/src/user) | ☑️ |  | 
 | POST | /users/logIn | [로그인](https://github.com/isoomni/geoplan/tree/master/src/src/main/java/kr/co/geoplan/metro/src/user) | ☑️|  |  |
 | GET | /restaurants/:userIdx | [식당 전체 조회](https://github.com/isoomni/geoplan/tree/master/src/src/main/java/kr/co/geoplan/metro/src/restaurant) | ☑️| ☑️ |  |
